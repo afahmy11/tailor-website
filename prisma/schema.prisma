@@ -1,0 +1,210 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------- Auth.js (NextAuth) ----------------
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+
+  accounts            Account[]
+  sessions            Session[]
+  measurementProfiles MeasurementProfile[]
+  orders              Order[]
+  consents            ConsentLog[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ---------------- Catalog ----------------
+enum StyleType {
+  CLOSED
+  OPEN_FRONT
+  BUTTERFLY
+  FLARED
+}
+
+model Style {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  type        StyleType
+  nameEn      String
+  nameAr      String
+  descEn      String
+  descAr      String
+  basePrice   Int        // minor units (e.g. fils/cents)
+  image       String
+  // measurement fields required for this style (JSON array of field keys)
+  fields      Json
+  active      Boolean    @default(true)
+  fabrics     StyleFabric[]
+  orders      Order[]
+}
+
+model Fabric {
+  id        String        @id @default(cuid())
+  slug      String        @unique
+  nameEn    String
+  nameAr    String
+  priceAdd  Int           @default(0) // surcharge in minor units
+  swatch    String        // hex or image path
+  leadDays  Int           @default(10)
+  inStock   Boolean       @default(true)
+  styles    StyleFabric[]
+  colors    ColorOption[]
+  orders    Order[]
+}
+
+model ColorOption {
+  id       String  @id @default(cuid())
+  nameEn   String
+  nameAr   String
+  hex      String
+  fabricId String
+  fabric   Fabric  @relation(fields: [fabricId], references: [id], onDelete: Cascade)
+  orders   Order[]
+}
+
+// many-to-many Style<->Fabric
+model StyleFabric {
+  styleId  String
+  fabricId String
+  style    Style  @relation(fields: [styleId], references: [id], onDelete: Cascade)
+  fabric   Fabric @relation(fields: [fabricId], references: [id], onDelete: Cascade)
+
+  @@id([styleId, fabricId])
+}
+
+// ---------------- Customer data (PII) ----------------
+model MeasurementProfile {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  // Encrypted JSON blob of measurements (cm). Never stored as plaintext columns.
+  data      String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum OrderStatus {
+  AWAITING_PAYMENT
+  RECEIVED
+  IN_TAILORING
+  SHIPPED
+  CANCELLED
+}
+
+model Order {
+  id            String        @id @default(cuid())
+  reference     String        @unique
+  userId        String
+  status        OrderStatus   @default(AWAITING_PAYMENT)
+
+  styleId       String
+  fabricId      String
+  colorId       String?
+  sleeve        String?
+  closure       String?
+  notes         String?       @db.Text
+
+  // Encrypted snapshot of measurements + shipping address (PII).
+  measurements  String        @db.Text
+  shipping      String        @db.Text
+
+  currency      String        @default("AED")
+  amount        Int           // total minor units
+
+  paymentProvider String      @default("manual")
+  paymentRef      String?
+  paidAt          DateTime?
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  style         Style         @relation(fields: [styleId], references: [id])
+  fabric        Fabric        @relation(fields: [fabricId], references: [id])
+  color         ColorOption?  @relation(fields: [colorId], references: [id])
+  events        OrderStatusEvent[]
+}
+
+model OrderStatusEvent {
+  id        String      @id @default(cuid())
+  orderId   String
+  status    OrderStatus
+  note      String?
+  createdAt DateTime    @default(now())
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+// ---------------- Compliance / security ----------------
+model AuditLog {
+  id        String   @id @default(cuid())
+  actor     String?  // user id or "system"
+  action    String   // e.g. AUTH_LOGIN, ORDER_CREATE, ORDER_STATUS_UPDATE
+  target    String?
+  ip        String?
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([action])
+  @@index([actor])
+}
+
+model ConsentLog {
+  id        String   @id @default(cuid())
+  userId    String
+  policy    String   // e.g. "privacy"
+  version   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

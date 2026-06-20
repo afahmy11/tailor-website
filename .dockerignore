@@ -1,0 +1,25 @@
+node_modules
+.next
+.git
+.gitignore
+
+# --- Secrets: never copy into the build context or any image layer ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+secrets/
+
+# --- Build artifacts / dev files ---
+*.log
+.DS_Store
+coverage
+Dockerfile
+docker-compose.yml
+README.md

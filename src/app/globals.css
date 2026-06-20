@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-arabic: 'Noto Kufi Arabic', 'Inter', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: theme('colors.ivory');
+  color: theme('colors.charcoal');
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+[dir='rtl'] body { font-family: var(--font-arabic); }
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-serif);
+  letter-spacing: -0.01em;
+}
+[dir='rtl'] h1, [dir='rtl'] h2, [dir='rtl'] h3 {
+  font-family: var(--font-arabic);
+  letter-spacing: normal;
+}
+
+/* Mirror measurement diagrams + directional UI in RTL */
+[dir='rtl'] .rtl-flip { transform: scaleX(-1); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.fade-in { animation: fadeIn 0.5s ease both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+:focus-visible { outline: 2px solid theme('colors.rose'); outline-offset: 2px; }

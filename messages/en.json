@@ -1,0 +1,57 @@
+{
+  "brand": { "name": "Atelier Abaya", "tagline": "Made to your measure" },
+  "nav": {
+    "home": "Home", "collections": "Collections", "customize": "Customize",
+    "sizeGuide": "Size guide", "about": "About", "contact": "Contact",
+    "account": "Account", "admin": "Admin", "login": "Sign in", "logout": "Sign out"
+  },
+  "home": {
+    "heroTitle": "Abayas, tailored to you",
+    "heroSubtitle": "Choose your style, share your measurements, and we craft it by hand.",
+    "cta": "Start your abaya",
+    "browse": "Browse collections",
+    "howTitle": "How it works",
+    "step1Title": "Choose", "step1Body": "Pick a style, fabric and colour you love.",
+    "step2Title": "Measure", "step2Body": "Follow our guided measurement steps.",
+    "step3Title": "We tailor", "step3Body": "Hand-finished and shipped to your door.",
+    "featured": "Featured styles",
+    "trust1": "Hand-finished craftsmanship",
+    "trust2": "Made-to-measure fit",
+    "trust3": "Secure, private ordering"
+  },
+  "collections": { "title": "Collections", "subtitle": "Each style is made to order in your chosen fabric.", "from": "From", "customize": "Customize" },
+  "wizard": {
+    "title": "Customize & order",
+    "step": "Step", "of": "of",
+    "s1": "Style & fabric", "s2": "Measurements", "s3": "Review", "s4": "Checkout",
+    "style": "Style", "fabric": "Fabric", "colour": "Colour", "sleeve": "Sleeve", "closure": "Closure",
+    "leadTime": "Lead time", "days": "days", "outOfStock": "Out of stock",
+    "next": "Continue", "back": "Back", "place": "Place order",
+    "standardInstead": "Choose a standard size instead",
+    "recommended": "Recommended size",
+    "notes": "Notes for the tailor (optional)",
+    "total": "Total", "saveProfile": "Save these measurements", "profileName": "Profile name"
+  },
+  "measure": {
+    "units": "Units", "cm": "cm", "inch": "inch",
+    "totalLength": "Total length", "totalLengthHint": "From the top of the shoulder straight down to the desired hem.",
+    "shoulderWidth": "Shoulder width", "shoulderWidthHint": "Across the back, from one shoulder seam to the other.",
+    "bust": "Bust", "bustHint": "Around the fullest part of the bust, keeping the tape level.",
+    "waist": "Waist", "waistHint": "Around the natural waistline, the narrowest part.",
+    "hips": "Hips", "hipsHint": "Around the fullest part of the hips.",
+    "sleeveLength": "Sleeve length", "sleeveLengthHint": "From the shoulder seam to the wrist.",
+    "armWidth": "Arm width", "armWidthHint": "Around the fullest part of the upper arm.",
+    "neck": "Neck", "neckHint": "Around the base of the neck.",
+    "warnWaistHips": "Waist is larger than hips — please double-check.",
+    "outOfRange": "Please enter a realistic value."
+  },
+  "sizeGuide": { "title": "Size guide", "subtitle": "Standard sizes. For the best fit, use made-to-measure.", "size": "Size", "bust": "Bust", "waist": "Waist", "hips": "Hips", "length": "Length" },
+  "contact": { "title": "Contact us", "subtitle": "We usually reply within a day.", "name": "Name", "email": "Email", "message": "Message", "send": "Send", "whatsapp": "Chat on WhatsApp", "sent": "Thank you — we'll be in touch." },
+  "account": { "title": "Your account", "orders": "Your orders", "profiles": "Saved measurements", "noOrders": "No orders yet.", "export": "Export my data", "delete": "Delete my account", "deleteConfirm": "This permanently deletes your account and data. Continue?" },
+  "admin": { "title": "Orders", "reference": "Reference", "customer": "Customer", "style": "Style", "status": "Status", "amount": "Amount", "update": "Update", "measurements": "Measurement sheet" },
+  "status": { "AWAITING_PAYMENT": "Awaiting payment", "RECEIVED": "Received", "IN_TAILORING": "In tailoring", "SHIPPED": "Shipped", "CANCELLED": "Cancelled" },
+  "auth": { "login": "Sign in", "emailLabel": "Email address", "sendLink": "Email me a sign-in link", "checkEmail": "Check your email for a sign-in link." },
+  "footer": { "rights": "All rights reserved.", "privacy": "Privacy" },
+  "privacy": { "title": "Privacy policy", "consent": "I agree to the storage of my measurements and order details as described in the privacy policy." },
+  "common": { "loading": "Loading…", "currency": "AED", "required": "Required" }
+}

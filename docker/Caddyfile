@@ -1,0 +1,24 @@
+# Local HTTPS with Caddy's internal CA (self-signed). Trust it once with:
+#   docker compose --profile proxy exec proxy caddy trust   (optional)
+# Then visit https://localhost:8443
+{
+  # Use Caddy's internal CA for local TLS.
+  local_certs
+}
+
+localhost:443, localhost {
+  encode gzip
+
+  # HSTS + hardening at the edge (app also sets headers).
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    -Server
+  }
+
+  reverse_proxy app:3000
+
+  # Basic edge rate limiting requires a plugin; in-app rate limiting is the default.
+}

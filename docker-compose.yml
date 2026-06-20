@@ -1,0 +1,86 @@
+name: atelier-abaya
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [internal]
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    # Secrets are injected at RUNTIME, never baked into the image.
+    # Default: load them from the local .env file.
+    env_file: .env
+    environment:
+      RUN_SEED: ${RUN_SEED:-false}
+      # Alternative to .env: pull secrets from your shell / a secrets manager at
+      # `docker compose up` time by uncommenting and exporting them on the host.
+      # AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET in your environment}
+      # FIELD_ENCRYPTION_KEY: ${FIELD_ENCRYPTION_KEY:?set FIELD_ENCRYPTION_KEY}
+      # DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL}
+      # STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    networks: [internal]
+
+  # Optional reverse proxy for HTTPS/TLS + HSTS testing locally.
+  # Start with: docker compose --profile proxy up
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    profiles: ["proxy"]
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "8443:443"
+      - "8080:80"
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [internal]
+
+  # Optional local mail catcher. UI at http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    profiles: ["mail", "proxy"]
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks: [internal]
+
+volumes:
+  db_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  internal:
+    driver: bridge
