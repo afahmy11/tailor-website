@@ -1,7 +1,7 @@
+import { PRIVACY_VERSION } from '@/lib/constants';
 import { getTranslations } from 'next-intl/server';
 import { Container, Section } from '@/components/ui';
 
-export const PRIVACY_VERSION = '2026-06-20';
 
 export default async function PrivacyPage() {
   const t = await getTranslations('privacy');
