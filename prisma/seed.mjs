@@ -12,10 +12,10 @@ const fabrics = [
 ];
 
 const styles = [
-  { slug:'classic-closed', type:'CLOSED',     nameEn:'Classic Closed Abaya', nameAr:'عباية مغلقة كلاسيكية', basePrice:35000, image:'/images/style-closed.svg',     descEn:'A timeless closed-front silhouette with a clean, elegant drape.', descAr:'تصميم مغلق خالد بانسدال أنيق ونظيف.', fields: ALL },
-  { slug:'open-front',     type:'OPEN_FRONT', nameEn:'Open-Front Abaya',     nameAr:'عباية مفتوحة من الأمام', basePrice:39000, image:'/images/style-open.svg',       descEn:'A versatile open-front layer, perfect over any outfit.', descAr:'طبقة مفتوحة من الأمام متعددة الاستخدامات.', fields: ALL },
-  { slug:'butterfly',      type:'BUTTERFLY',  nameEn:'Butterfly Abaya',      nameAr:'عباية فراشة', basePrice:42000, image:'/images/style-butterfly.svg', descEn:'Dramatic flowing wings for a graceful, statement look.', descAr:'أجنحة منسدلة لإطلالة أنيقة ولافتة.', fields: ['totalLength','shoulderWidth','bust','sleeveLength','neck'] },
-  { slug:'flared',         type:'FLARED',     nameEn:'Flared Abaya',         nameAr:'عباية كلوش', basePrice:40000, image:'/images/style-flared.svg',    descEn:'Fitted at the shoulder with a softly flared hem.', descAr:'ضيقة عند الكتف مع ذيل منسدل بنعومة.', fields: ALL },
+  { slug:'classic-closed', type:'CLOSED',     nameEn:'Classic Closed Abaya', nameAr:'عباية مغلقة كلاسيكية', basePrice:35000, image:'/images/style-closed.jpg',     descEn:'A timeless closed-front silhouette with a clean, elegant drape.', descAr:'تصميم مغلق خالد بانسدال أنيق ونظيف.', fields: ALL },
+  { slug:'open-front',     type:'OPEN_FRONT', nameEn:'Open-Front Abaya',     nameAr:'عباية مفتوحة من الأمام', basePrice:39000, image:'/images/style-open.jpg',       descEn:'A versatile open-front layer, perfect over any outfit.', descAr:'طبقة مفتوحة من الأمام متعددة الاستخدامات.', fields: ALL },
+  { slug:'butterfly',      type:'BUTTERFLY',  nameEn:'Butterfly Abaya',      nameAr:'عباية فراشة', basePrice:42000, image:'/images/style-butterfly.jpg', descEn:'Dramatic flowing wings for a graceful, statement look.', descAr:'أجنحة منسدلة لإطلالة أنيقة ولافتة.', fields: ['totalLength','shoulderWidth','bust','sleeveLength','neck'] },
+  { slug:'flared',         type:'FLARED',     nameEn:'Flared Abaya',         nameAr:'عباية كلوش', basePrice:40000, image:'/images/style-flared.jpg',    descEn:'Fitted at the shoulder with a softly flared hem.', descAr:'ضيقة عند الكتف مع ذيل منسدل بنعومة.', fields: ALL },
 ];
 
 async function main() {
@@ -35,7 +35,7 @@ async function main() {
   for (const s of styles) {
     const style = await prisma.style.upsert({
       where: { slug: s.slug },
-      update: {},
+      update: { image: s.image },
       create: {
         slug: s.slug, type: s.type, nameEn: s.nameEn, nameAr: s.nameAr,
         descEn: s.descEn, descAr: s.descAr, basePrice: s.basePrice,

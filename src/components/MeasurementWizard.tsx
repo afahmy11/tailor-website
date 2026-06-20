@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { FIELD_RANGES } from '@/lib/validation/measurement';
 import { recommendSize, toCm, toInch, CM_PER_INCH } from '@/lib/sizing';
@@ -8,7 +9,7 @@ import { MeasurementFigure } from './MeasurementFigure';
 
 type Color = { id: string; nameEn: string; nameAr: string; hex: string };
 type Fabric = { slug: string; nameEn: string; nameAr: string; priceAdd: number; swatch: string; leadDays: number; inStock: boolean; colors: Color[] };
-export type WizardStyle = { slug: string; type: string; nameEn: string; nameAr: string; descEn: string; descAr: string; basePrice: number; fields: string[]; fabrics: Fabric[] };
+export type WizardStyle = { slug: string; type: string; nameEn: string; nameAr: string; descEn: string; descAr: string; basePrice: number; image: string; fields: string[]; fabrics: Fabric[] };
 
 const SLEEVES = ['standard', 'wide', 'fitted'] as const;
 const CLOSURES = ['none', 'snap', 'zip', 'tie'] as const;
@@ -181,7 +182,9 @@ export function MeasurementWizard({
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {styles.map((s) => (
                 <button key={s.slug} onClick={() => setStyleSlug(s.slug)} className={`p-4 rounded-xl border text-start ${styleSlug === s.slug ? 'border-rose ring-1 ring-rose' : 'border-charcoal/15'}`}>
-                  <span className="block aspect-[3/4] bg-sand/40 rounded mb-2" />
+                  <span className="block aspect-[3/4] bg-sand/40 rounded mb-2 overflow-hidden relative">
+                    <Image src={s.image} alt={name(s)} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
+                  </span>
                   <span className="text-sm">{name(s)}</span>
                 </button>
               ))}

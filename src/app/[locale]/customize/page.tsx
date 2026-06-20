@@ -29,6 +29,7 @@ export default async function CustomizePage({
     descEn: s.descEn,
     descAr: s.descAr,
     basePrice: s.basePrice,
+    image: s.image,
     fields: (s.fields as string[]) ?? [],
     fabrics: s.fabrics.map((sf) => ({
       slug: sf.fabric.slug,

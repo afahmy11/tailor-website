@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/prisma';
 import { Container, Section, ButtonLink } from '@/components/ui';
@@ -21,8 +22,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <ButtonLink href="/collections" variant="outline">{t('browse')}</ButtonLink>
             </div>
           </div>
-          <div className="aspect-[3/4] rounded-2xl bg-gradient-to-b from-rose/20 to-charcoal/10 flex items-center justify-center">
-            <span className="font-display text-3xl text-charcoal/40">Atelier Abaya</span>
+          <div className="aspect-[3/4] rounded-2xl overflow-hidden relative">
+            <Image src="/images/hero.jpg" alt="Atelier Abaya" fill className="object-cover" priority sizes="(max-width: 768px) 100vw, 50vw" />
           </div>
         </Container>
       </Section>
@@ -50,8 +51,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {styles.map((s) => (
               <Link key={s.id} href={`/collections#${s.slug}`} className="group">
-                <div className="aspect-[3/4] rounded-xl bg-ivory border border-charcoal/10 mb-3 overflow-hidden flex items-center justify-center">
-                  <span className="font-display text-charcoal/30">{locale === 'ar' ? s.nameAr : s.nameEn}</span>
+                <div className="aspect-[3/4] rounded-xl bg-ivory border border-charcoal/10 mb-3 overflow-hidden relative">
+                  <Image src={s.image} alt={locale === 'ar' ? s.nameAr : s.nameEn} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="(max-width: 768px) 50vw, 25vw" />
                 </div>
                 <p className="text-sm">{locale === 'ar' ? s.nameAr : s.nameEn}</p>
                 <p className="text-sm text-muted">{t('featured')} · {formatMoney(s.basePrice, undefined, locale)}</p>

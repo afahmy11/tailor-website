@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/prisma';
 import { Container, Section, ButtonLink } from '@/components/ui';
@@ -19,8 +20,8 @@ export default async function CollectionsPage({ params }: { params: Promise<{ lo
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {styles.map((s) => (
             <article key={s.id} id={s.slug} className="border border-charcoal/10 rounded-2xl overflow-hidden bg-ivory">
-              <div className="aspect-[4/5] bg-sand/40 flex items-center justify-center">
-                <span className="font-display text-2xl text-charcoal/30">{locale === 'ar' ? s.nameAr : s.nameEn}</span>
+              <div className="aspect-[4/5] bg-sand/40 relative overflow-hidden">
+                <Image src={s.image} alt={locale === 'ar' ? s.nameAr : s.nameEn} fill className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
               </div>
               <div className="p-5">
                 <h2 className="text-xl mb-1">{locale === 'ar' ? s.nameAr : s.nameEn}</h2>
