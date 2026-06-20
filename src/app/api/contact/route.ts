@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
   const { name, email, message } = parsed.data;
   await sendMail(
-    process.env.EMAIL_FROM ?? '[email protected]',
+    process.env.EMAIL_FROM ?? 'no-reply@atelier-abaya.local',
     `Contact from ${name}`,
     `<p><strong>${name}</strong> (${email})</p><p>${message.replace(/</g, '&lt;')}</p>`,
   ).catch(() => {});

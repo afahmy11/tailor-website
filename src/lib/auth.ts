@@ -27,7 +27,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
           : undefined,
       },
-      from: process.env.EMAIL_FROM ?? 'Atelier Abaya <[email protected]>',
+      from: process.env.EMAIL_FROM ?? 'Atelier Abaya <no-reply@atelier-abaya.local>',
       maxAge: 10 * 60, // single-use link valid 10 minutes
     }),
   ],

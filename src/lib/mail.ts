@@ -13,7 +13,7 @@ function transport() {
 
 export async function sendMail(to: string, subject: string, html: string) {
   await transport().sendMail({
-    from: process.env.EMAIL_FROM ?? 'Atelier Abaya <[email protected]>',
+    from: process.env.EMAIL_FROM ?? 'Atelier Abaya <no-reply@atelier-abaya.local>',
     to,
     subject,
     html,
