@@ -1,5 +1,5 @@
 # Atelier Abaya — common commands
-.PHONY: help build up up-proxy down logs migrate seed psql shell reset
+.PHONY: help build up up-proxy down logs migrate seed psql shell reset push
 
 help:
 	@echo "make build      - build docker images"
@@ -42,3 +42,12 @@ shell:
 
 reset:
 	docker compose down -v && docker compose --profile mail up -d --build
+
+# Push current commit to origin/dev. Uses a gitignored token file if present
+# (.deploy/gh_token), otherwise falls back to your configured git credentials.
+push:
+	@if [ -f .deploy/gh_token ]; then \
+		git push "https://x-access-token:$$(cat .deploy/gh_token)@github.com/afahmy11/tailor-website.git" HEAD:dev; \
+	else \
+		git push origin HEAD:dev; \
+	fi
