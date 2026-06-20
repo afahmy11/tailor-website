@@ -13,10 +13,12 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
 
   const { name, email, message } = parsed.data;
+  // Strip CR/LF to prevent email header injection via user-controlled name.
+  const safeName = name.replace(/[\r\n]+/g, ' ').slice(0, 120);
   await sendMail(
     process.env.EMAIL_FROM ?? 'no-reply@atelier-abaya.local',
-    `Contact from ${name}`,
-    `<p><strong>${name}</strong> (${email})</p><p>${message.replace(/</g, '&lt;')}</p>`,
+    `Contact from ${safeName}`,
+    `<p><strong>${safeName}</strong> (${email})</p><p>${message.replace(/</g, '&lt;')}</p>`,
   ).catch(() => {});
   await audit({ action: 'CONTACT_SUBMIT', ip });
   return NextResponse.json({ ok: true });
