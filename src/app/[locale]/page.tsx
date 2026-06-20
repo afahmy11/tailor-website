@@ -4,8 +4,8 @@ import { Container, Section, ButtonLink } from '@/components/ui';
 import { Link } from '@/i18n/navigation';
 import { formatMoney } from '@/lib/format';
 
-export default async function HomePage({ params }: { params: { locale: string } }) {
-  const { locale } = params;
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const t = await getTranslations('home');
   const styles = await prisma.style.findMany({ where: { active: true }, take: 4 });
 

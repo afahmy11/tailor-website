@@ -3,8 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { Container, Section, ButtonLink } from '@/components/ui';
 import { formatMoney } from '@/lib/format';
 
-export default async function CollectionsPage({ params }: { params: { locale: string } }) {
-  const { locale } = params;
+export default async function CollectionsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const t = await getTranslations('collections');
   const styles = await prisma.style.findMany({
     where: { active: true },

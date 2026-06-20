@@ -6,8 +6,8 @@ import { Container, Section } from '@/components/ui';
 import { AccountActions } from '@/components/AccountActions';
 import { formatMoney } from '@/lib/format';
 
-export default async function AccountPage({ params }: { params: { locale: string } }) {
-  const { locale } = params;
+export default async function AccountPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const session = await auth();
   if (!session?.user) redirect(`/${locale}/login`);
 

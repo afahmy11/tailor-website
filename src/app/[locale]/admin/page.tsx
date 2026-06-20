@@ -9,8 +9,8 @@ import { formatMoney } from '@/lib/format';
 
 function safe<T>(fn: () => T): T | null { try { return fn(); } catch { return null; } }
 
-export default async function AdminPage({ params }: { params: { locale: string } }) {
-  const { locale } = params;
+export default async function AdminPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const admin = await requireAdmin();
   if (!admin) redirect(`/${locale}/login`);
 

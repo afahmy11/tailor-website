@@ -52,7 +52,7 @@ COPY --from=build /app/node_modules/.bin ./node_modules/.bin
 COPY --from=build /app/prisma ./prisma
 
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN chmod 755 /usr/local/bin/entrypoint.sh
 
 USER nextjs
 EXPOSE 3000

@@ -8,11 +8,11 @@ export default async function CustomizePage({
   params,
   searchParams,
 }: {
-  params: { locale: string };
-  searchParams: { style?: string };
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ style?: string }>;
 }) {
-  const { locale } = params;
-  const { style: initialStyle } = searchParams;
+  const { locale } = await params;
+  const { style: initialStyle } = await searchParams;
   const t = await getTranslations('wizard');
   const session = await auth();
 

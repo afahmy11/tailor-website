@@ -20,7 +20,7 @@ make down                     # stop
 Admin: log in with an email listed in `ADMIN_EMAILS`, then visit `/admin`.
 
 ## Tech decisions (memory)
-- **Stack:** Next.js 14 App Router, TS, `output: 'standalone'` (long-running Node server, NOT serverless). Tailwind. Prisma + Postgres 16. Zod everywhere.
+- **Stack:** Next.js 15 App Router, TS, `output: 'standalone'` (long-running Node server, NOT serverless). Tailwind. Prisma + Postgres 16. Zod everywhere.
 - **Auth:** Auth.js v5 (NextAuth) magic-link email via SMTP (Mailpit in dev). No passwords → no password hashing needed. Admin gated by `ADMIN_EMAILS` + DB role.
 - **Fonts:** `next/font` self-hosts at build time (Cormorant = serif headings, Inter = sans body, Noto Kufi Arabic = Arabic). No runtime Google CDN dependency. Arabic typeface added because Cormorant/Inter lack Arabic coverage.
 - **i18n/RTL:** next-intl, EN + AR, `dir` switches via `[locale]` segment.
@@ -57,7 +57,7 @@ Admin: log in with an email listed in `ADMIN_EMAILS`, then visit `/admin`.
 - All 49 TS/TSX files compile via esbuild with tsconfig path aliases (syntax, JSX, every local/@ import resolves).
 - All JSON (messages, configs) parse.
 - Baseline migration `prisma/migrations/20260620000000_init` parses against the real Postgres grammar (libpg_query).
-- Aligned page/layout `params` to Next 14.2 synchronous style.
+- Aligned page/layout `params` to Next 15 async style (Promise-based params/searchParams).
 - NOTE: a full `next build` / `prisma generate` could NOT run in the build sandbox because Google Fonts
   and Prisma's engine host (binaries.prisma.sh) are network-blocked there. Both work normally in your
   Docker build (open network). So the first real end-to-end compile happens on `docker compose up`.

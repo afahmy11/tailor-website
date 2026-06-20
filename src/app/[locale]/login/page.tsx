@@ -2,8 +2,8 @@ import { getTranslations } from 'next-intl/server';
 import { Container, Section } from '@/components/ui';
 import { LoginForm } from '@/components/LoginForm';
 
-export default async function LoginPage({ searchParams }: { searchParams: { sent?: string } }) {
-  const { sent } = searchParams;
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ sent?: string }> }) {
+  const { sent } = await searchParams;
   const t = await getTranslations('auth');
   return (
     <Section>
